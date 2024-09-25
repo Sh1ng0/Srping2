@@ -1,0 +1,224 @@
+UNIVERSIDAD:
+
+1:
+
+SELECT nombre,apellido1,apellido2 
+FROM persona
+ORDER BY apellido1, apellido2, nombre DESC
+
+2:
+
+SELECT * FROM persona
+WHERE telefono IS NULL
+
+3:
+
+SELECT * FROM persona
+WHERE fecha_nacimiento BETWEEN '1999-01-01' AND '2000-01-01'
+
+4:
+
+SELECT * FROM persona
+WHERE tipo = 'profesor' AND telefono IS NULL AND nif LIKE '%K'
+
+5:
+
+SELECT * FROM asignatura
+WHERE cuatrimestre = 2 AND curso = 3 AND id_grado = 7
+
+6: 
+
+SELECT 
+    persona.apellido1, 
+    persona.apellido2, 
+    persona.nombre, 
+    departamento.nombre AS 'nombre_departamento' 
+FROM 
+    persona 
+JOIN 
+    profesor ON persona.id = profesor.id_profesor 
+JOIN 
+    departamento ON profesor.id_departamento = departamento.id 
+WHERE 
+    persona.tipo = 'profesor' 
+ORDER BY 
+    persona.apellido1, 
+    persona.apellido2, 
+    persona.nombre;
+
+7:
+
+SELECT 
+    asignatura.nombre,
+    curso_escolar.anyo_inicio,
+    curso_escolar.anyo_fin
+FROM
+    persona
+        JOIN
+    alumno_se_matricula_asignatura ON persona.id = alumno_se_matricula_asignatura.id_alumno
+        JOIN
+    curso_escolar ON curso_escolar.id = alumno_se_matricula_asignatura.id_curso_escolar
+        JOIN
+    asignatura ON alumno_se_matricula_asignatura.id_asignatura = asignatura.id
+WHERE
+    nif = '26902806M'
+
+8:
+
+SELECT DISTINCT
+    departamento.nombre
+FROM
+    persona
+        JOIN
+    profesor ON persona.id = profesor.id_profesor
+        JOIN
+    departamento ON profesor.id_departamento = departamento.id
+        JOIN
+    asignatura ON asignatura.id_profesor = persona.id
+        JOIN
+    grado ON grado.id = asignatura.id_grado
+WHERE
+    persona.tipo = 'profesor'
+        AND grado.id = 4
+
+9: 
+
+USE universidad;
+SELECT 
+    *
+FROM
+    persona p
+        JOIN
+    alumno_se_matricula_asignatura ama ON ama.id_alumno = p.id
+        JOIN
+    curso_escolar ce ON ce.id = ama.id_curso_escolar
+WHERE
+    ama.id_curso_escolar = 5
+
+
+CONSULTES RESUM UNIVERSITAT:
+
+1:
+
+SELECT COUNT(*)  FROM persona
+WHERE tipo = 'alumno'
+
+2:
+
+SELECT *  FROM persona 
+WHERE tipo = 'alumno' AND fecha_nacimiento LIKE '1999%'
+
+3:
+
+SELECT 
+    d.nombre, COUNT(p.id_profesor) AS cantidad_profesores
+FROM
+    profesor p
+        JOIN
+    departamento d ON p.id_departamento = d.id
+GROUP BY d.nombre; 
+
+
+4:
+
+SELECT 
+    d.nombre, 
+    COUNT(p.id_profesor) AS cantidad_profesores
+FROM 
+    departamento d
+LEFT JOIN 
+    profesor p ON p.id_departamento = d.id
+GROUP BY 
+    d.nombre;
+
+
+
+SELECT COUNT(a.id) AS 'cantidad_asignaturas', 
+g.nombre 
+FROM grado g
+LEFT JOIN asignatura a
+ON g.id = a.id_grado
+GROUP BY g.id
+ORDER BY cantidad_asignaturas DESC;
+
+5:
+
+
+
+Resol les 6 següents consultes utilitzant les clàusules LEFT JOIN i RIGHT JOIN.
+
+1:
+
+SELECT 
+    d.nombre AS 'nombre_departamento',
+    p.apellido1,
+    p.apellido2,
+    p.nombre
+FROM
+    persona p
+        LEFT JOIN
+    profesor pr ON p.id = pr.id_profesor
+        LEFT JOIN
+    departamento d ON pr.id_departamento = d.id
+WHERE
+    tipo = 'profesor' 
+GROUP BY p.id 
+
+2:
+
+SELECT count(*) FROM persona
+WHERE tipo = 'profesor'
+
+count = 12
+
+SELECT COUNT(*) FROM profesor
+ORDER BY id_profesor
+
+count = 12
+
+No hay profesres sin departamento.
+
+3:
+
+SELECT 
+    COUNT(*) AS total_profesores,
+    SUM(CASE WHEN d.nombre IS NULL THEN 1 ELSE 0 END) AS sin_departamento
+FROM
+    persona p
+        LEFT JOIN
+    profesor pr ON p.id = pr.id_profesor
+        LEFT JOIN
+    departamento d ON pr.id_departamento = d.id
+WHERE
+    p.tipo = 'profesor';
+
+
+
+4:
+
+SELECT 
+p.nombre,
+p.apellido1,
+p.apellido2,
+a.nombre
+ FROM persona p
+LEFT JOIN asignatura a
+ON p.id = a.id_profesor 
+WHERE a.nombre IS NULL AND p.tipo = 'profesor'
+
+5:
+
+SELECT 
+    a.nombre AS 'asignaturas_sin_profesor'
+FROM 
+    asignatura a
+LEFT JOIN 
+    profesor pr ON a.id_profesor = pr.id_profesor
+WHERE 
+    pr.id_profesor IS NULL;	
+
+6:
+
+SELECT nombre AS 'Asignaturas_sin_curso_escolar'
+FROM asignatura
+WHERE curso IS NULL

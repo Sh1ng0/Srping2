@@ -1,0 +1,84 @@
+QUERIES TIENDA:
+
+TIENDA
+
+1: SELECT nombre FROM producto
+
+2: SELECT nombre, precio FROM producto
+
+3: SELECT * FROM producto
+
+4/5 (?):
+
+SELECT nombre, precio AS 'euros',
+ROUND(precio * 1.12,2) AS 'dolares'
+
+FROM producto 
+
+6: 
+
+SELECT UPPER(nombre) AS NOMBRE,  precio AS PRECIO
+
+FROM producto;
+
+7:
+
+SELECT LOWER (nombre) AS nombre,  precio AS precio
+
+FROM producto;
+
+8:
+
+SELECT nombre,
+CONCAT(UPPER(LEFT(nombre,2)), LOWER(SUBSTRING(nombre, 3))) AS 2_CAPS
+
+FROM fabricante
+
+9:
+
+SELECT codigo, nombre, ROUND(precio), codigo_fabricante 
+
+FROM producto
+
+10:
+
+SELECT nombre, TRUNCATE(precio, 0) AS precio_sin_decimales
+FROM producto
+
+11:
+
+SELECT * FROM producto
+INNER JOIN fabricante 
+ON producto.codigo_fabricante = fabricante.codigo
+ORDER BY codigo_fabricante
+
+12: 
+
+SELECT DISTINCT codigo_fabricante
+FROM producto;
+
+13: 
+
+SELECT * FROM fabricante
+ORDER BY nombre 
+
+14: 
+
+SELECT * FROM fabricante
+ORDER BY nombre DESC
+
+15:
+
+SELECT * FROM producto
+ORDER BY nombre, precio DESC
+
+16:
+
+SELECT * FROM fabricante
+LIMIT 5
+
+17:
+
+SELECT * FROM fabricante
+LIMIT 3,3
+
